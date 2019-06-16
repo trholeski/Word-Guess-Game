@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Container that hlds the game -->
 
+    <!-- You won or lost - header -->
+
+    <!-- Divs that whill hold the letters of the word -->
+    <div id="letterContainer"></div>
+
+    <script type="text/javascript">
+
+    function userPressedKey(event) {
+        // Call the search function
+        search(event.key);
+    }
+
+    document.onkeypress = userPressedKey;
+
+    // Build word
+    var letters = 'apple';
+
+    for (i = 0; i < letters.length; i++) {
+        var letterBox = document.createElement("div");
+            letterBox.setAttribute('id', 'letterBoxId' + i);
+            letterBox.setAttribute('class', 'letter');
+            letterBox.innerText += '__';
+            document.getElementById("letterContainer").appendChild(letterBox);
+    }
+    // Search word function - for loop that checks users input against letters of the word
+    function search(userInput) {
+        console.log(event.key);
+        if (letters[i] == userInput){
+            revealLetter(i);
+        }
+        // For loop through each letter in the word
+            // If letter equals word[i]
+            // revealLetter(i)
+    }
+
+    // Reveal letter function fills letter div with the users selection if it is in the word
+    function revealLetter(index) {
+        // Replace the dash with a letter
+        document.getElementById('letterBoxId').innerText(index);
+    }
+    
+
+    </script>
+</body>
+</html>
