@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Hangman Game</title>
+    <link rel="stylesheet" type="text/css" href="CSS/css-reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"                      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="CSS/style.css">
+
 </head>
 <body>
     <!-- Container that hlds the game -->
-
+    <div>
+        <h1>Welcome to the game</h1>
+    </div>
     <!-- You won or lost - header -->
 
     <!-- Divs that whill hold the letters of the word -->
@@ -30,14 +38,16 @@
         var letterBox = document.createElement("div");
             letterBox.setAttribute('id', 'letterBoxId' + i);
             letterBox.setAttribute('class', 'letter');
-            letterBox.innerText += '__';
+            letterBox.innerHTML += '__';
             document.getElementById("letterContainer").appendChild(letterBox);
     }
     // Search word function - for loop that checks users input against letters of the word
     function search(userInput) {
-        console.log(event.key);
-        if (letters[i] == userInput){
-            revealLetter(i);
+        
+        for (i = 0; i < letters.length; i++){
+            if (letters[i] == userInput){
+                revealLetter(event.key);
+            }
         }
         // For loop through each letter in the word
             // If letter equals word[i]
@@ -46,11 +56,11 @@
 
     // Reveal letter function fills letter div with the users selection if it is in the word
     function revealLetter(index) {
+        console.log("made it to reveal");
         // Replace the dash with a letter
-        document.getElementById('letterBoxId').innerText(index);
+        document.getElementById("letterBoxId").innerHTML = index;
     }
-    
 
-    </script>
+    </script> 
 </body>
 </html>
