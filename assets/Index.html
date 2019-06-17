@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hangman Game</title>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/css-reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"                      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+</head>
+<body>
+    <!-- Container that hlds the game -->
+    <div class = "container parent-container">
+        <div class = "row">
+            <div class = "col-md-8 offset-2 gameBanner">
+                <h1>Welcome to the game</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class = "col-md-8 offset-2 gameFace">
+                <div class = "row">
+                    <!-- Divs that whill hold the letters of the word -->
+                    <div class = "col-md-6 offset-3 gameResult"> <h2>You Won!</h2></div>
+                </div>
+                <div class = "row">
+                    <div class = "col-md-6 offset-3 gameDoc">How to play...</div>
+                </div>
+                <div class = "row">
+                        <div class = "col-md-6 offset-3 gameDoc">Wins: # </div>
+                </div>
+                <div class = "row">
+                        <div class = "col-md-6 offset-3 gameDoc">Current word:</div>
+                </div>
+                <div class = "row">
+                    <!-- Divs that whill hold the letters of the word -->
+                    <div class = "col-md-6 offset-3" id="letterContainer"></div>
+                </div>
+                <div class = "row">
+                        <div class = "col-md-8 offset-2 gameDoc">Number of guesses remaining?</div>
+                </div>
+                <div class = "row">
+                        <div class = "col-md-6 offset-3 counter">##</div>
+                </div>
+                <div class = "row">
+                        <div class = "col-md-8 offset-2 gameDoc">Letters guessed already...</div>
+                </div>
+                <div class = "row">
+                        <div class = "col-md-8 offset-2 wrongLetters">where wrong letters are displayed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    
+    // function userPressedKey(event) {
+    //     // Call the search function
+    //     search(event.key);
+    // }
+
+    // document.onkeypress = userPressedKey;
+
+    // Build word
+    var letters = 'apple';
+
+    for (i = 0; i < letters.length; i++) {
+        var letterBox = document.createElement("div");
+            letterBox.setAttribute('id', 'letterBoxId' + i);
+            letterBox.setAttribute('class', 'letter');
+            letterBox.innerHTML += '__';
+            document.getElementById("letterContainer").appendChild(letterBox);
+    }
+    // Search word function - for loop that checks users input against letters of the word
+    document.onkeyup = function(event) {
+    var userInput = event.key;
+    }
+    
+    function search(userInput) {
+        
+        for (i = 0; i < letters.length; i++){
+            if (letters[i] == userInput){
+                revealLetter(event.key);
+            }
+        }
+        // For loop through each letter in the word
+            // If letter equals word[i]
+            // revealLetter(i)
+    }
+
+    // Reveal letter function fills letter div with the users selection if it is in the word
+    function revealLetter(index) {
+        console.log("made it to reveal");
+        // Replace the dash with a letter
+        document.getElementById("letterBoxId").innerHTML = index;
+    }
+});
+    </script> 
+</body>
+</html>

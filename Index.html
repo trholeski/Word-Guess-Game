@@ -5,60 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Hangman Game</title>
-    <link rel="stylesheet" type="text/css" href="CSS/css-reset.css">
+
+    <link rel="stylesheet" type="text/css" href="assets/css/css-reset.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"                      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="CSS/style.css">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
 </head>
 <body>
     <!-- Container that hlds the game -->
-    <div>
-        <h1>Welcome to the game</h1>
+    <div class = "container parent-container">
+        <div class = "row">
+            <div class = "col-md-8 offset-2 gameBanner">
+                <h1>Welcome to the game</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class = "col-md-8 gameFace">
+                <div class = "row justify-content-center">
+                    <!-- Divs that whill hold the letters of the word -->
+                    <div class = "col-md-6 gameResult"> <h2>You Won!</h2></div>
+                </div>
+                <div class = "row">
+                    <div class = "col-md-6 offset-3 gameDoc">How to play...</div>
+                </div>
+                <div class = "row">
+                    <div class = "col-md-6 offset-3 gameDoc">
+                        <span>Wins: </span><span id="totalWinsBox">0</span>
+                    </div>
+                </div>
+                <div class = "row">
+                    <div class = "col-md-6 offset-3 gameDoc">Current word:</div>
+                </div>
+                <div class = "row">
+                    <!-- Divs that will hold the letters of the word -->
+                    <div class = "col-md-6 offset-3" id="letterContainer"></div>
+                </div>
+                <div class = "row">
+                    <div class = "col-md-8 offset-2 gameDoc">Number of guesses remaining?</div>
+                </div>
+                <div class = "row">
+                    <div id="guessesRemainingBox" class = "col-md-6 offset-3 counter">10</div>
+                </div>
+                <div class = "row">
+                    <div class="col-md-8 offset-2 gameDoc">Letters guessed already...</div>
+                </div>
+                <div class = "row">
+                    <div id="wrongLetters" class="col-md-8 offset-2"></div>
+                </div>
+                <div class = "row">
+                    <div class="col-md-8 offset-2" id="gameConclusion"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- You won or lost - header -->
 
-    <!-- Divs that whill hold the letters of the word -->
-    <div id="letterContainer"></div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
 
-    <script type="text/javascript">
+    
+    // function userPressedKey(event) {
+    //     // Call the search function
+    //     search(event.key);
+    // }
 
-    function userPressedKey(event) {
-        // Call the search function
-        search(event.key);
-    }
-
-    document.onkeypress = userPressedKey;
+    // document.onkeypress = userPressedKey;
 
     // Build word
+    var wins = 0;
+    var losses = 0;
     var letters = 'apple';
+    var guessesRemaining = 10;
 
     for (i = 0; i < letters.length; i++) {
         var letterBox = document.createElement("div");
+        letterBox.setAttribute('id', 'letterBoxId' + i);
+        letterBox.setAttribute('class', 'letter');
+        letterBox.innerHTML += '__';
+        document.getElementById('letterContainer').appendChild(letterBox);
+    }
+    //capture the users key stroke in variable: userInput
+    document.onkeyup = function(event) {
+        var userInput = event.key;
+        search(userInput);
+    };
+// Search word function - for loop that checks users input against letters of the word
+// For loop through each letter in the word
+        // If letter equals word[i]
+        // revealLetter(i)
+    function search(userInput) {
+        var guessedCorrect = false;
+        guessesRemaining -= 1;
+        document.getElementById('guessesRemainingBox').innerHTML = guessesRemaining;
+        for (i = 0; i < letters.length; i++) {
+            // console.log('searching...');
+            // console.log(letters[i]);
+            if (letters[i] == userInput) {
+                // console.log(letters[i] + ' is same as ' + userInput);
+                document.getElementById("letterBoxId" + i).innerHTML = letters[i];
+                guessedCorrect = true;
+            }
+        }
+        // Reveal letter function fills letter div with the users selection if it is in the word
+        if (guessedCorrect == false){
+            document.getElementById("wrongLetters").innerHTML += userInput;
+        }   
+        checkWins(userInput);
+    };
+    
+    function checkWins(input){
+        var allLettersFilled = true;
+        for (i = 0; i < letters.length; i++) {
+            if (document.getElementById('letterBoxId' + i).innerHTML == "__") {  
+                allLettersFilled = false;
+            }   
+        }    
+        if (allLettersFilled == true){
+            wins += 1;
+            document.getElementById('totalWinsBox').innerHTML = wins;
+            document.getElementById('gameConclusion').innerHTML = "Congratulations, you won! Play again? Press y?";
+            if (input == y){
+                startGame();
+            }
+            // display "you won" banner
+            // prompt user to begin a new game
+        }
+        if (allLettersFilled == false && guessesRemaining == 0){
+            losses += 1;
+            document.getElementById('gameConclusion').innerHTML = "I'm so sorry, you lost! Play again? Press y?";
+            if (input == y){
+                startGame();
+            }
+            console.log("losses:" + losses);
+            // display "you lost" banner
+            // prompt user to begin a new game
+        }
+    };
+
+    function startGame(){
+        document.getElementById("wrongLetters").innerHTML = "";
+        wins = 0;
+        losses = 0;
+        letters = 'apple';
+        guessesRemaining = 10;
+
+        document.getElementById('letterContainer').innerHTML = "";
+
+        for (i = 0; i < letters.length; i++) {
+            var letterBox = document.createElement("div");
             letterBox.setAttribute('id', 'letterBoxId' + i);
             letterBox.setAttribute('class', 'letter');
             letterBox.innerHTML += '__';
-            document.getElementById("letterContainer").appendChild(letterBox);
-    }
-    // Search word function - for loop that checks users input against letters of the word
-    function search(userInput) {
-        
-        for (i = 0; i < letters.length; i++){
-            if (letters[i] == userInput){
-                revealLetter(event.key);
-            }
+            document.getElementById('letterContainer').appendChild(letterBox);
         }
-        // For loop through each letter in the word
-            // If letter equals word[i]
-            // revealLetter(i)
-    }
-
-    // Reveal letter function fills letter div with the users selection if it is in the word
-    function revealLetter(index) {
-        console.log("made it to reveal");
-        // Replace the dash with a letter
-        document.getElementById("letterBoxId").innerHTML = index;
     }
 
     </script> 

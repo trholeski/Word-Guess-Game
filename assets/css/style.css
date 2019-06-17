@@ -1,0 +1,31 @@
+.gameFace{
+    border: 1px solid black;
+    height: 500px;
+}
+.gameBanner{
+    margin-top: 3em;
+    text-align: center;
+}
+#letterContainer{
+    height:2em;
+    width: 10em;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+.gameResult{
+    border: 1px solid black;
+    text-align: center;
+    margin-bottom: 2em;
+}
+.letter{
+    display: inline;
+    margin: 5px;
+}
+.counter{
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.wrongLetters{
+    margin-top: 1em;
+}
