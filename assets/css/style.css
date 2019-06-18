@@ -1,6 +1,6 @@
 .gameFace{
     border: 1px solid black;
-    height: 500px;
+    height: 700px;
 }
 .gameBanner{
     margin-top: 3em;
@@ -28,4 +28,10 @@
 }
 .wrongLetters{
     margin-top: 1em;
+}
+.gameDocRules{
+    margin-bottom: 1em;
+}
+.gameDocWins{
+    margin-bottom: 1em;
 }
