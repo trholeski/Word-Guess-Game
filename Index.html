@@ -25,7 +25,7 @@
             <div class = "col-md-8 gameFace">
                 <div class = "row justify-content-center">
                     <!-- Divs that whill hold the letters of the word -->
-                    <div class = "col-md-6 gameResult"> <h2>You Won!</h2></div>
+                    <div class = "col-md-6 gameResult"> <h2>Press any key to get started!</h2></div>
                 </div>
                 <div class = "row">
                     <div class = "col-md-6 offset-3 gameDoc">How to play...</div>
@@ -64,21 +64,18 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-    
-    // function userPressedKey(event) {
-    //     // Call the search function
-    //     search(event.key);
-    // }
-
-    // document.onkeypress = userPressedKey;
-
-    // Build word
+    // Global variables
     var wins = 0;
     var losses = 0;
-    var letters = 'apple';
     var guessesRemaining = 10;
+    var gameEnded = false;
+    var lettersGuessed = "";
+    var wordBankIndex = 0;
 
-    for (i = 0; i < letters.length; i++) {
+    var wordBank = ['apple', 'asparagus', 'orange', 'carrots', 'blueberries'];
+    var word = wordBank[0];
+
+    for (i = 0; i < word.length; i++) {
         var letterBox = document.createElement("div");
         letterBox.setAttribute('id', 'letterBoxId' + i);
         letterBox.setAttribute('class', 'letter');
@@ -86,79 +83,104 @@
         document.getElementById('letterContainer').appendChild(letterBox);
     }
     //capture the users key stroke in variable: userInput
+
     document.onkeyup = function(event) {
         var userInput = event.key;
-        search(userInput);
-    };
-// Search word function - for loop that checks users input against letters of the word
-// For loop through each letter in the word
-        // If letter equals word[i]
-        // revealLetter(i)
-    function search(userInput) {
-        var guessedCorrect = false;
-        guessesRemaining -= 1;
-        document.getElementById('guessesRemainingBox').innerHTML = guessesRemaining;
-        for (i = 0; i < letters.length; i++) {
-            // console.log('searching...');
-            // console.log(letters[i]);
-            if (letters[i] == userInput) {
-                // console.log(letters[i] + ' is same as ' + userInput);
-                document.getElementById("letterBoxId" + i).innerHTML = letters[i];
-                guessedCorrect = true;
+        // If the game ended
+        if (gameEnded) {
+            // If the user input is y
+            if (userInput == 'y') {
+                wordBankIndex++;
+
+                // Reset the game board
+                resetGame(wordBankIndex % wordBank.length);
             }
+            // Otherwise do nothing
         }
-        // Reveal letter function fills letter div with the users selection if it is in the word
-        if (guessedCorrect == false){
-            document.getElementById("wrongLetters").innerHTML += userInput;
-        }   
-        checkWins(userInput);
-    };
-    
-    function checkWins(input){
-        var allLettersFilled = true;
-        for (i = 0; i < letters.length; i++) {
-            if (document.getElementById('letterBoxId' + i).innerHTML == "__") {  
-                allLettersFilled = false;
-            }   
-        }    
-        if (allLettersFilled == true){
-            wins += 1;
-            document.getElementById('totalWinsBox').innerHTML = wins;
-            document.getElementById('gameConclusion').innerHTML = "Congratulations, you won! Play again? Press y?";
-            if (input == y){
-                startGame();
-            }
-            // display "you won" banner
-            // prompt user to begin a new game
+        else {
+            playGame(userInput);
         }
-        if (allLettersFilled == false && guessesRemaining == 0){
-            losses += 1;
-            document.getElementById('gameConclusion').innerHTML = "I'm so sorry, you lost! Play again? Press y?";
-            if (input == y){
-                startGame();
-            }
-            console.log("losses:" + losses);
-            // display "you lost" banner
-            // prompt user to begin a new game
-        }
+        
     };
 
-    function startGame(){
+    function resetGame(index) {
         document.getElementById("wrongLetters").innerHTML = "";
-        wins = 0;
-        losses = 0;
-        letters = 'apple';
+        word = wordBank[index];
         guessesRemaining = 10;
+        gameEnded = false;
+        lettersGuessed = '';
 
         document.getElementById('letterContainer').innerHTML = "";
+        document.getElementById('gameConclusion').innerHTML = "";
+        document.getElementById('guessesRemainingBox').innerHTML = guessesRemaining;
 
-        for (i = 0; i < letters.length; i++) {
+        for (i = 0; i < word.length; i++) {
             var letterBox = document.createElement("div");
             letterBox.setAttribute('id', 'letterBoxId' + i);
             letterBox.setAttribute('class', 'letter');
             letterBox.innerHTML += '__';
             document.getElementById('letterContainer').appendChild(letterBox);
         }
+    }
+
+    function playGame(userInput) {
+        // If the user has not guessed this letter before
+        if ( !hasUserInputBeenGuessed(userInput, lettersGuessed) ) {
+            lettersGuessed += userInput;
+            guessesRemaining -= 1;
+            document.getElementById('guessesRemainingBox').innerHTML = guessesRemaining;
+
+            // Check if the user input is one of the letters in the word
+            var guessedCorrect = false;
+            for (i = 0; i < word.length; i++) {
+                // If the user input matches the letter in the word
+                if (word[i] == userInput) {
+                    // Replace the underscore with the letter
+                    document.getElementById("letterBoxId" + i).innerHTML = word[i];
+                    guessedCorrect = true;
+                }
+            }
+
+            // If the letter was not in the word
+            if ( !guessedCorrect ) {
+                // Add it to the list of wrong letters
+                document.getElementById("wrongLetters").innerHTML += userInput;
+            }   
+
+            // Check if the game has ended
+            // The game has ended if all of the letters are filled or if there are no guesses remaining
+            var allLettersFilled = true;
+            for (i = 0; i < word.length; i++) {
+                if (document.getElementById('letterBoxId' + i).innerHTML == "__") {  
+                    allLettersFilled = false;
+                }   
+            }
+            
+            if (guessesRemaining <= 0) {
+                if ( !allLettersFilled ) {
+                    losses += 1;
+                    gameEnded = true;
+                    document.getElementById('gameConclusion').innerHTML = "I'm so sorry, you lost :( Play again? Press y";
+                }
+            }
+            else {
+                if (allLettersFilled) {
+                    wins += 1;
+                    document.getElementById('totalWinsBox').innerHTML = wins;
+                    gameEnded = true;
+                    document.getElementById('gameConclusion').innerHTML = "Congratulations, you won! Play again? Press y";
+                }
+            }
+        }
+    };    
+
+    function hasUserInputBeenGuessed (userInput, lettersGuessed){
+        for (i=0; i<lettersGuessed.length; i++){
+            if (userInput == lettersGuessed[i]){
+                return true;
+            }
+        }
+        return false;
     }
 
     </script> 
